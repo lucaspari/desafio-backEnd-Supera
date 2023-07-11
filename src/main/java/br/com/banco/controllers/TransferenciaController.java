@@ -24,23 +24,20 @@ public class TransferenciaController {
 
     @GetMapping("/listar/search/")
     public ResponseEntity<List<Transferencia>> listar(
-        @RequestParam(value = "dateTime", required = false)
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-        LocalDateTime dateTime,
-        @RequestParam(value = "nome", required = false)
-        String nome) {
-    List<Transferencia> transferencias;
+            @RequestParam(value = "dateTime", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime dateTime,
+            @RequestParam(value = "nome", required = false) String nome) {
+        List<Transferencia> transferencias;
 
-    if (dateTime != null && nome != null) {
-        transferencias = transferenciaService.findAllTransferenciaByContaNomeResponsavelAndData(nome, dateTime);
-    } else if (dateTime != null) {
-        transferencias = transferenciaService.findAllTransferenciaByData(dateTime);
-    } else if (nome != null) {
-        transferencias = transferenciaService.findAllTransferenciaByContaNomeResponsavel(nome);
-    } else {
-        transferencias = transferenciaService.findAllTransferencias();
+        if (dateTime != null && nome != null) {
+            transferencias = transferenciaService.findAllTransferenciaByContaNomeResponsavelAndData(nome, dateTime);
+        } else if (dateTime != null) {
+            transferencias = transferenciaService.findAllTransferenciaByData(dateTime);
+        } else if (nome != null) {
+            transferencias = transferenciaService.findAllTransferenciaByContaNomeResponsavel(nome);
+        } else {
+            transferencias = transferenciaService.findAllTransferencias();
+        }
+
+        return ResponseEntity.ok(transferencias);
     }
-
-    return ResponseEntity.ok(transferencias);
-}
 }

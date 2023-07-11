@@ -65,16 +65,13 @@ class TransferenciaServiceTest {
 
     @Test
     public void testFindAllTransferenciaByContaNomeResponsavel() {
-        // Arrange
-        String nome = "John Doe";
+        String nome = "Jon Snow";
         List<Transferencia> transferencias = new ArrayList<>();
         transferencias.add(new Transferencia());
         Mockito.when(transferenciaRepository.findAllByContaNomeResponsavel(nome)).thenReturn(transferencias);
 
-        // Act
         List<Transferencia> result = transferenciaService.findAllTransferenciaByContaNomeResponsavel(nome);
 
-        // Assert
         Assertions.assertEquals(transferencias, result);
         Mockito.verify(transferenciaRepository, Mockito.times(1)).findAllByContaNomeResponsavel(nome);
     }
@@ -86,13 +83,13 @@ class TransferenciaServiceTest {
         LocalDateTime data = LocalDateTime.now();
         List<Transferencia> transferencias = new ArrayList<>();
         transferencias.add(new Transferencia());
-        Mockito.when(transferenciaRepository.findAllByContaNomeResponsavelAndDataTransferencia(nome, data)).thenReturn(transferencias);
+        Mockito.when(transferenciaRepository.findAllByContaNomeResponsavelAndDataTransferencia(nome, data))
+                .thenReturn(transferencias);
 
-        // Act
         List<Transferencia> result = transferenciaService.findAllTransferenciaByContaNomeResponsavelAndData(nome, data);
 
-        // Assert
         Assertions.assertEquals(transferencias, result);
-        Mockito.verify(transferenciaRepository, Mockito.times(1)).findAllByContaNomeResponsavelAndDataTransferencia(nome, data);
+        Mockito.verify(transferenciaRepository, Mockito.times(1))
+                .findAllByContaNomeResponsavelAndDataTransferencia(nome, data);
     }
 }
