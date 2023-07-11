@@ -1,4 +1,4 @@
-package br.com.banco.model;
+package br.com.banco.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
