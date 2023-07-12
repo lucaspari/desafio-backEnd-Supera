@@ -29,15 +29,16 @@ public class TransferenciaControllerTest {
     @Test
     public void testListar() {
         LocalDate dateTime = LocalDate.now();
+        LocalDate dateTime2 = LocalDate.now().plusDays(1);
         String nome = "Jon Snow";
         List<Transferencia> transferencias = new ArrayList<>();
         transferencias.add(new Transferencia());
-        Mockito.when(transferenciaService.findAllTransferenciaByContaNomeResponsavelAndData(nome, dateTime))
+        Mockito.when(transferenciaService.findAllTransferenciasByDataBetweenAndNomeOp(nome, dateTime,dateTime2))
                 .thenReturn(transferencias);
-        Mockito.when(transferenciaService.findAllTransferenciaByContaNomeResponsavel(nome)).thenReturn(transferencias);
+        Mockito.when(transferenciaService.findAllTransferenciaByNomeOperadorResponsavel(nome)).thenReturn(transferencias);
         Mockito.when(transferenciaService.findAllTransferencias()).thenReturn(transferencias);
 
-        ResponseEntity<List<Transferencia>> result = transferenciaController.listar(dateTime, null, nome);
+        ResponseEntity<List<Transferencia>> result = transferenciaController.listar(dateTime, dateTime2, nome);
         ResponseEntity<List<Transferencia>> result2 = transferenciaController.listar(null, null, null);
         ResponseEntity<List<Transferencia>> result3 = transferenciaController.listar(dateTime, null, null);
         ResponseEntity<List<Transferencia>> result4 = transferenciaController.listar(null, null, nome);
@@ -50,7 +51,6 @@ public class TransferenciaControllerTest {
         Assertions.assertEquals(transferencias, result3.getBody());
         Assertions.assertEquals(HttpStatus.OK, result4.getStatusCode());
         Assertions.assertEquals(transferencias, result4.getBody());
-        Mockito.verify(transferenciaService, Mockito.times(1)).findAllTransferenciaByContaNomeResponsavelAndData(nome,
-                dateTime);
+        Mockito.verify(transferenciaService, Mockito.times(1)).findAllTransferenciasByDataBetweenAndNomeOp(nome, dateTime, dateTime2);
     }
 }

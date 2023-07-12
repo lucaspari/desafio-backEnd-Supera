@@ -32,12 +32,21 @@ public class TransferenciaService {
 
     }
 
-    public List<Transferencia> findAllTransferenciaByContaNomeResponsavel(String nome) {
-        return transferenciaRepository.findAllByContaNomeResponsavel(nome);
+    public List<Transferencia> findAllTransferenciaByNomeOperadorResponsavel(String nome) {
+        return transferenciaRepository.findAllByNomeOperadorTransacao(nome);
     }
 
-    public List<Transferencia> findAllTransferenciaByContaNomeResponsavelAndData(String nome, LocalDate data) {
-        return transferenciaRepository.findAllByContaNomeResponsavelAndDataTransferencia(nome, data.atStartOfDay());
+    public List<Transferencia> findAllTransferenciasByDataBetweenAndNomeOp(String nome, LocalDate data,LocalDate data2) {
+        var transferencias = transferenciaRepository.
+        findAllByDataTransferenciaBetween(data.atStartOfDay(), data2.atStartOfDay());
+        transferencias.forEach(t -> System.out.println(t.getNomeOperadorTransacao()));
+        return transferencias.stream()
+    .filter(t -> {
+        String nomeOperadorTransacao = t.getNomeOperadorTransacao();
+        return nomeOperadorTransacao != null && nomeOperadorTransacao.equals(nome);
+    })
+    .toList();
+        
     }
 
 }

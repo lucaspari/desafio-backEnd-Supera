@@ -11,6 +11,8 @@ import br.com.banco.models.Transferencia;
 import br.com.banco.repositories.TransferenciaRepository;
 import org.junit.jupiter.api.Assertions;
 
+import static org.mockito.Mockito.when;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,29 +71,30 @@ class TransferenciaServiceTest {
         String nome = "Jon Snow";
         List<Transferencia> transferencias = new ArrayList<>();
         transferencias.add(new Transferencia());
-        Mockito.when(transferenciaRepository.findAllByContaNomeResponsavel(nome)).thenReturn(transferencias);
+        Mockito.when(transferenciaRepository.findAllByNomeOperadorTransacao(nome)).thenReturn(transferencias);
 
-        List<Transferencia> result = transferenciaService.findAllTransferenciaByContaNomeResponsavel(nome);
+        List<Transferencia> result = transferenciaService.findAllTransferenciaByNomeOperadorResponsavel(nome);
 
         Assertions.assertEquals(transferencias, result);
-        Mockito.verify(transferenciaRepository, Mockito.times(1)).findAllByContaNomeResponsavel(nome);
+        Mockito.verify(transferenciaRepository, Mockito.times(1)).findAllByNomeOperadorTransacao(nome);
     }
-
-    @Test
-    public void testFindAllTransferenciaByContaNomeResponsavelAndData() {
-        // Arrange
-        String nome = "Jon Snow";
-        LocalDate data = LocalDate.now();
+        @Test
+    public void testFindAllTransferenciasByDataBetweenAndNomeOp() {
+        String nome = "João";
+        LocalDate data1 = LocalDate.now();
+        LocalDate data2 = LocalDate.now().plusDays(1);
         List<Transferencia> transferencias = new ArrayList<>();
-        transferencias.add(new Transferencia());
-        Mockito.when(
-                transferenciaRepository.findAllByContaNomeResponsavelAndDataTransferencia(nome, data.atStartOfDay()))
-                .thenReturn(transferencias);
-
-        List<Transferencia> result = transferenciaService.findAllTransferenciaByContaNomeResponsavelAndData(nome, data);
-
-        Assertions.assertEquals(transferencias, result);
-        Mockito.verify(transferenciaRepository, Mockito.times(1))
-                .findAllByContaNomeResponsavelAndDataTransferencia(nome, data.atStartOfDay());
+        Transferencia transferencia1 = new Transferencia();
+        transferencia1.setId(1L);
+        transferencia1.setNomeOperadorTransacao(nome);
+        Transferencia transferencia2 = new Transferencia();
+        transferencia2.setId(2L);
+        transferencia2.setNomeOperadorTransacao("Maria");
+        transferencias.add(transferencia1);
+        transferencias.add(transferencia2);
+        when(transferenciaRepository.findAllByDataTransferenciaBetween(data1.atStartOfDay(), data2.atStartOfDay())).thenReturn(transferencias);
+        List<Transferencia> result = transferenciaService.findAllTransferenciasByDataBetweenAndNomeOp(nome, data1, data2);
+        Assertions.assertEquals(result.get(0).getNomeOperadorTransacao(),"João");
     }
+
 }
