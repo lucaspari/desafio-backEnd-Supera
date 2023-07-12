@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import br.com.banco.models.Transferencia;
 import br.com.banco.services.TransferenciaService;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,19 +28,19 @@ public class TransferenciaControllerTest {
 
     @Test
     public void testListar() {
-        LocalDateTime dateTime = LocalDateTime.now();
+        LocalDate dateTime = LocalDate.now();
         String nome = "Jon Snow";
         List<Transferencia> transferencias = new ArrayList<>();
         transferencias.add(new Transferencia());
-        Mockito.when(transferenciaService.findAllTransferenciaByContaNomeResponsavelAndData(nome, dateTime)).thenReturn(transferencias);
-        Mockito.when(transferenciaService.findAllTransferenciaByData(dateTime)).thenReturn(transferencias);
+        Mockito.when(transferenciaService.findAllTransferenciaByContaNomeResponsavelAndData(nome, dateTime))
+                .thenReturn(transferencias);
         Mockito.when(transferenciaService.findAllTransferenciaByContaNomeResponsavel(nome)).thenReturn(transferencias);
         Mockito.when(transferenciaService.findAllTransferencias()).thenReturn(transferencias);
 
-        ResponseEntity<List<Transferencia>> result = transferenciaController.listar(dateTime, nome);
-        ResponseEntity<List<Transferencia>> result2 = transferenciaController.listar(null, null);
-        ResponseEntity<List<Transferencia>> result3 = transferenciaController.listar(dateTime, null);
-        ResponseEntity<List<Transferencia>> result4 = transferenciaController.listar(null, nome);
+        ResponseEntity<List<Transferencia>> result = transferenciaController.listar(dateTime, null, nome);
+        ResponseEntity<List<Transferencia>> result2 = transferenciaController.listar(null, null, null);
+        ResponseEntity<List<Transferencia>> result3 = transferenciaController.listar(dateTime, null, null);
+        ResponseEntity<List<Transferencia>> result4 = transferenciaController.listar(null, null, nome);
 
         Assertions.assertEquals(HttpStatus.OK, result.getStatusCode());
         Assertions.assertEquals(transferencias, result.getBody());
@@ -50,6 +50,7 @@ public class TransferenciaControllerTest {
         Assertions.assertEquals(transferencias, result3.getBody());
         Assertions.assertEquals(HttpStatus.OK, result4.getStatusCode());
         Assertions.assertEquals(transferencias, result4.getBody());
-        Mockito.verify(transferenciaService, Mockito.times(1)).findAllTransferenciaByContaNomeResponsavelAndData(nome, dateTime);
+        Mockito.verify(transferenciaService, Mockito.times(1)).findAllTransferenciaByContaNomeResponsavelAndData(nome,
+                dateTime);
     }
 }

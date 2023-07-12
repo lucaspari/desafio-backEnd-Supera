@@ -15,4 +15,6 @@ public interface TransferenciaRepository extends JpaRepository<Transferencia, Lo
 
     List<Transferencia> findAllByContaNomeResponsavelAndDataTransferencia(String nome, LocalDateTime data);
 
+    List<Transferencia> findAllByDataTransferenciaBetween(LocalDateTime d1, LocalDateTime d2);
+
 }

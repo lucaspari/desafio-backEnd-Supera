@@ -11,7 +11,7 @@ import br.com.banco.models.Transferencia;
 import br.com.banco.repositories.TransferenciaRepository;
 import org.junit.jupiter.api.Assertions;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,15 +52,16 @@ class TransferenciaServiceTest {
     @Test
     public void testFindAllTransferenciaByData() {
 
-        LocalDateTime data = LocalDateTime.now();
+        LocalDate data = LocalDate.now();
         List<Transferencia> transferencias = new ArrayList<>();
         transferencias.add(new Transferencia());
-        Mockito.when(transferenciaRepository.findAllByDataTransferencia(data)).thenReturn(transferencias);
+        Mockito.when(transferenciaRepository.findAllByDataTransferencia(data.atStartOfDay()))
+                .thenReturn(transferencias);
 
         List<Transferencia> result = transferenciaService.findAllTransferenciaByData(data);
 
         Assertions.assertEquals(transferencias, result);
-        Mockito.verify(transferenciaRepository, Mockito.times(1)).findAllByDataTransferencia(data);
+        Mockito.verify(transferenciaRepository, Mockito.times(1)).findAllByDataTransferencia(data.atStartOfDay());
     }
 
     @Test
@@ -80,16 +81,17 @@ class TransferenciaServiceTest {
     public void testFindAllTransferenciaByContaNomeResponsavelAndData() {
         // Arrange
         String nome = "Jon Snow";
-        LocalDateTime data = LocalDateTime.now();
+        LocalDate data = LocalDate.now();
         List<Transferencia> transferencias = new ArrayList<>();
         transferencias.add(new Transferencia());
-        Mockito.when(transferenciaRepository.findAllByContaNomeResponsavelAndDataTransferencia(nome, data))
+        Mockito.when(
+                transferenciaRepository.findAllByContaNomeResponsavelAndDataTransferencia(nome, data.atStartOfDay()))
                 .thenReturn(transferencias);
 
         List<Transferencia> result = transferenciaService.findAllTransferenciaByContaNomeResponsavelAndData(nome, data);
 
         Assertions.assertEquals(transferencias, result);
         Mockito.verify(transferenciaRepository, Mockito.times(1))
-                .findAllByContaNomeResponsavelAndDataTransferencia(nome, data);
+                .findAllByContaNomeResponsavelAndDataTransferencia(nome, data.atStartOfDay());
     }
 }
